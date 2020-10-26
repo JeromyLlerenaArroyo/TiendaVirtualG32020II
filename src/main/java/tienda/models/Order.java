@@ -10,16 +10,21 @@ public class Order {
     private Double price;
     private String address;
     private String courier;
-
     private String customer;
+
+    private List<IOrderItem> orderItems;
 
 
     public List<IOrderItem> getOrderItems() {
-        List<IOrderItem> ordersItems = new ArrayList<>();
+        //List<IOrderItem> ordersItems = new ArrayList<>();
         /*
             Get logic, ORM, SQL
         */
-        return ordersItems;
+        return orderItems;
+    }
+
+    public void setOrderItems(List<IOrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
     public Double calculateTotalOrder() {

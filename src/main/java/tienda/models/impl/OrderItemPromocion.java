@@ -6,10 +6,15 @@ import tienda.models.interfaces.IOrderItem;
 
 public class OrderItemPromocion implements IOrderItem {
 
-    private Order order;
-    private Product product;
+    private String idProduct;
     private Integer quantity;
     private Double price;
+
+    public OrderItemPromocion(String idProduct, Integer quantity, Double price)  {
+        this.idProduct = idProduct;
+        this.quantity = quantity;
+        this.price = price;
+    }
 
     @Override
     public Double calculatePrice() {

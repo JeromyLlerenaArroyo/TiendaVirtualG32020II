@@ -3,12 +3,20 @@ package tienda.controllers.impl;
 import tienda.config.Paths;
 import tienda.controllers.OrderController;
 import tienda.models.Order;
+import tienda.models.Product;
+import tienda.models.impl.OrderItemInternet;
+import tienda.models.impl.OrderItemPromocion;
+import tienda.models.interfaces.IOrderItem;
 import tienda.repositories.OrderRepository;
 import tienda.utils.OrderCourierDispatcher;
 
 import io.javalin.http.Context;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.NotFoundResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+
 //import org.bson.types.ObjectId;
 import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.http.HttpStatus;
@@ -25,18 +33,17 @@ public class OrderControllerImpl implements OrderController {
     public void create(Context context) {
         Order order = context.bodyAsClass(Order.class);
 
-        if (order.getId() != null) {
-            throw new BadRequestResponse(String.format("Unable to create a new order with existing id: %s", order));
-        }
-
         OrderCourierDispatcher orderCourierDispatcher = new OrderCourierDispatcher(order);
         String bestCourier = orderCourierDispatcher.getBestCourier();
         order.setCourier(bestCourier);
 
-        orderRepository.create(order);
-        context.status(HttpStatus.CREATED_201)
-                .header(HttpHeader.LOCATION.name(), Paths.formatPostLocation(order.getId().toString()));
-
+        List<IOrderItem> items = new ArrayList<>();
+        OrderItemInternet oi1 = new OrderItemInternet( "P01010034", 1, 400.90);
+        OrderItemPromocion oi2 = new OrderItemPromocion( "P01010025", 1, 600.90);
+        items.add(oi1);
+        items.add(oi2);
+        order.setOrderItems(items);
+        System.out.println("Total price" + order.calculateTotalOrder());
     }
 
     public void find(Context context) {
@@ -54,7 +61,7 @@ public class OrderControllerImpl implements OrderController {
     public void findAll(Context context) {
         context.json(orderRepository.findAll());
     }
-    
+
     @Override
     public void delete(Context context) {
         orderRepository.delete(context.pathParam(ID));

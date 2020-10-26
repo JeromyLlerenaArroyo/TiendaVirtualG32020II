@@ -5,10 +5,17 @@ import tienda.models.Product;
 import tienda.models.interfaces.IOrderItem;
 
 public class OrderItemInternet implements IOrderItem {
-    private Order order;
-    private Product product;
+    private String idProduct;
     private Integer quantity;
     private Double price;
+
+    public OrderItemInternet(String idProduct,Integer quantity,Double price)  {
+        //this.order = order;
+        //this.product = product;
+        this.idProduct = idProduct;
+        this.quantity = quantity;
+        this.price = price;
+    }
 
     @Override
     public Double calculatePrice() {
