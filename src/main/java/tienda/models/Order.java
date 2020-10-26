@@ -1,15 +1,18 @@
 package tienda.models;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import com.fasterxml.uuid.Generators;
 import tienda.models.interfaces.IOrderItem;
+
+import javax.validation.constraints.Null;
 
 
 public class Order {
     private String id;
     private Double price;
     private String address;
-    private String courier;
     private String customer;
 
     private List<IOrderItem> orderItems;
@@ -39,6 +42,10 @@ public class Order {
         return totalPrice;
     }
 
+    public void pay(PaymentMethod paymentMethod){
+        System.out.println("Paying order "+getId());
+        paymentMethod.payOrder(this);
+    }
 
     public Double getPrice() {
         return price;
@@ -72,11 +79,4 @@ public class Order {
         this.id = id;
     }
 
-    public String getCourier() {
-        return courier;
-    }
-
-    public void setCourier(String courier) {
-        this.courier = courier;
-    }
 }

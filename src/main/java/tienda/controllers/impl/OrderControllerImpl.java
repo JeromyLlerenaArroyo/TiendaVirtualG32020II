@@ -2,7 +2,9 @@ package tienda.controllers.impl;
 
 import tienda.config.Paths;
 import tienda.controllers.OrderController;
+import tienda.models.BlockChainPaymentMethod;
 import tienda.models.Order;
+import tienda.models.PaymentMethod;
 import tienda.models.Product;
 import tienda.models.impl.OrderItemInternet;
 import tienda.models.impl.OrderItemPromocion;
@@ -33,17 +35,33 @@ public class OrderControllerImpl implements OrderController {
     public void create(Context context) {
         Order order = context.bodyAsClass(Order.class);
 
-        OrderCourierDispatcher orderCourierDispatcher = new OrderCourierDispatcher(order);
-        String bestCourier = orderCourierDispatcher.getBestCourier();
-        order.setCourier(bestCourier);
-
         List<IOrderItem> items = new ArrayList<>();
         OrderItemInternet oi1 = new OrderItemInternet( "P01010034", 1, 400.90);
         OrderItemPromocion oi2 = new OrderItemPromocion( "P01010025", 1, 600.90);
         items.add(oi1);
         items.add(oi2);
         order.setOrderItems(items);
-        System.out.println("Total price" + order.calculateTotalOrder());
+        System.out.println("Total price " + order.calculateTotalOrder());
+    }
+
+    public void pay(Context context){
+        String id = context.pathParam(ID);
+        Order order = context.bodyAsClass(Order.class);
+        order.setId(id);
+
+        List<IOrderItem> items = new ArrayList<>();
+        OrderItemInternet oi1 = new OrderItemInternet( "P01010034", 1, 200.90);
+        OrderItemPromocion oi2 = new OrderItemPromocion( "P01010025", 1, 70.90);
+        items.add(oi1);
+        items.add(oi2);
+        order.setOrderItems(items);
+
+        PaymentMethod paymentMethod = new PaymentMethod();
+        BlockChainPaymentMethod blockChainPaymentMethod = new BlockChainPaymentMethod();
+
+        order.pay(paymentMethod);
+        order.pay(blockChainPaymentMethod);
+
     }
 
     public void find(Context context) {
