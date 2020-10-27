@@ -1,39 +1,38 @@
 package tienda.models.impl;
 
-import tienda.models.Order;
-import tienda.models.Product;
-import tienda.models.interfaces.IOrderItem;
+import tienda.models.Pedido;
+import tienda.models.interfaces.IPedidoDetalle;
 
-public class OrderItemPromocion implements IOrderItem {
+public class PedidoDetallePromocion implements IPedidoDetalle {
 
     private String idProduct;
     private Integer quantity;
     private Double price;
 
-    public OrderItemPromocion(String idProduct, Integer quantity, Double price)  {
+    public PedidoDetallePromocion(String idProduct, Integer quantity, Double price)  {
         this.idProduct = idProduct;
         this.quantity = quantity;
         this.price = price;
     }
 
     @Override
-    public Double calculatePrice() {
+    public Double calculaPrecio() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Order getOrder() {
+    public Pedido getPedido() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Double getPrice() {
+    public Double getPrecio() {
         Double customPrice = 0.0;
         customPrice = this.price * this.quantity;
 
-        // promo cuarentena, primera compra
+        // promo primera compra
         customPrice -= 20.0;
 
         if (customPrice < 0 ) {
@@ -43,19 +42,13 @@ public class OrderItemPromocion implements IOrderItem {
     }
 
     @Override
-    public Product getProduct() {
+    public Integer getCantidad() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Integer getQuantity() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setOrder(Order order) {
+    public void setPedido(Pedido order) {
         // TODO Auto-generated method stub
 
     }

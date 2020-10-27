@@ -2,15 +2,13 @@ package tienda.controllers.impl;
 
 import tienda.config.Paths;
 import tienda.controllers.OrderController;
-import tienda.models.BlockChainPaymentMethod;
-import tienda.models.Order;
-import tienda.models.PaymentMethod;
-import tienda.models.Product;
-import tienda.models.impl.OrderItemInternet;
-import tienda.models.impl.OrderItemPromocion;
-import tienda.models.interfaces.IOrderItem;
-import tienda.repositories.OrderRepository;
-import tienda.utils.OrderCourierDispatcher;
+import tienda.models.BlockChainMetodoPago;
+import tienda.models.Pedido;
+import tienda.models.MetodoPago;
+import tienda.models.impl.PedidoDetalleInternet;
+import tienda.models.impl.PedidoDetallePromocion;
+import tienda.models.interfaces.IPedidoDetalle;
+import tienda.repositories.PedidoRepositorio;
 
 import io.javalin.http.Context;
 import io.javalin.http.BadRequestResponse;
@@ -26,47 +24,57 @@ import org.eclipse.jetty.http.HttpStatus;
 public class OrderControllerImpl implements OrderController {
     private static final String ID = "id";
 
-    private OrderRepository orderRepository;
+    private PedidoRepositorio orderRepository;
 
-    public OrderControllerImpl(OrderRepository orderRepository) {
+    public OrderControllerImpl(PedidoRepositorio orderRepository) {
         this.orderRepository = orderRepository;
     }
 
     public void create(Context context) {
-        Order order = context.bodyAsClass(Order.class);
+        Pedido order = context.bodyAsClass(Pedido.class);
 
-        List<IOrderItem> items = new ArrayList<>();
-        OrderItemInternet oi1 = new OrderItemInternet( "P01010034", 1, 400.90);
-        OrderItemPromocion oi2 = new OrderItemPromocion( "P01010025", 1, 600.90);
+        /*List<IPedidoDetalle> items = new ArrayList<>();
+        PedidoDetalleInternet oi1 = new PedidoDetalleInternet( "P01010034", 1, 400.90);
+        PedidoDetallePromocion oi2 = new PedidoDetallePromocion( "P01010025", 1, 600.90);
         items.add(oi1);
         items.add(oi2);
-        order.setOrderItems(items);
-        System.out.println("Total price " + order.calculateTotalOrder());
+        order.setDetallePedido(items);
+
+        System.out.println("Precio Total " + order.calcularMontoPedido() );*/
+
+        //MetodoPago paymentMethod = new MetodoPago();
+        //order.pagar(paymentMethod);
+
+        orderRepository.create(order);
+
+        context.status(HttpStatus.CREATED_201)
+                .header(HttpHeader.LOCATION.name(), Paths.formatPostLocation(order.getId().toString()));
+
     }
 
-    public void pay(Context context){
+    /*public void pay(Context context){
         String id = context.pathParam(ID);
-        Order order = context.bodyAsClass(Order.class);
+        Pedido order = context.bodyAsClass(Pedido.class);
         order.setId(id);
 
-        List<IOrderItem> items = new ArrayList<>();
-        OrderItemInternet oi1 = new OrderItemInternet( "P01010034", 1, 200.90);
-        OrderItemPromocion oi2 = new OrderItemPromocion( "P01010025", 1, 70.90);
+        List<IPedidoDetalle> items = new ArrayList<>();
+        PedidoDetalleInternet oi1 = new PedidoDetalleInternet( "P01010034", 1, 200.90);
+        PedidoDetallePromocion oi2 = new PedidoDetallePromocion( "P01010025", 1, 70.90);
         items.add(oi1);
         items.add(oi2);
-        order.setOrderItems(items);
+        order.setDetallePedido(items);
 
-        PaymentMethod paymentMethod = new PaymentMethod();
-        BlockChainPaymentMethod blockChainPaymentMethod = new BlockChainPaymentMethod();
+        MetodoPago paymentMethod = new MetodoPago();
+        BlockChainMetodoPago blockChainPaymentMethod = new BlockChainMetodoPago();
 
         order.pay(paymentMethod);
         order.pay(blockChainPaymentMethod);
 
-    }
+    }*/
 
     public void find(Context context) {
         String id = context.pathParam(ID);
-        Order order = orderRepository.find(id);
+        Pedido order = orderRepository.find(id);
 
         if (order == null) {
             throw new NotFoundResponse(String.format("A order with id '%s' is not found", id));
@@ -89,7 +97,7 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     public void update(Context context) {
-        Order order = context.bodyAsClass(Order.class);
+        Pedido order = context.bodyAsClass(Pedido.class);
         String id = context.pathParam(ID);
 
         if (order.getId() != null && !order.getId().toString().equals(id)) {

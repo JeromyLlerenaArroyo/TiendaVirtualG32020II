@@ -3,8 +3,8 @@ package tienda.controllers.impl;
 import tienda.config.Paths;
 //import tienda.config.Paths;
 import tienda.controllers.CustomerController;
-import tienda.models.Customer;
-import tienda.repositories.CustomerRepository;
+import tienda.models.Cliente;
+import tienda.repositories.ClienteRepositorio;
 import io.javalin.http.Context;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.NotFoundResponse;
@@ -16,16 +16,16 @@ import org.eclipse.jetty.http.HttpStatus;
 public class CustomerControllerImpl implements CustomerController {
     private static final String ID = "id";
 
-    private CustomerRepository customerRepository;
+    private ClienteRepositorio customerRepository;
 
-    public CustomerControllerImpl(CustomerRepository postRepository) {
+    public CustomerControllerImpl(ClienteRepositorio postRepository) {
         this.customerRepository = postRepository;
     }
 
     @Override
     public void create(Context context) {
 
-        Customer customer = context.bodyAsClass(Customer.class);
+        Cliente customer = context.bodyAsClass(Cliente.class);
         System.out.println("Cliente: " + customer);
 
         //if (customer.getId() != null) {
@@ -47,7 +47,7 @@ public class CustomerControllerImpl implements CustomerController {
     @Override
     public void find(Context context) {
         String id = context.pathParam(ID);
-        Customer customer = customerRepository.find(id);
+        Cliente customer = customerRepository.find(id);
 
         if (customer == null) {
             throw new NotFoundResponse(String.format("A customer with id '%s' is not found", id));
@@ -64,7 +64,7 @@ public class CustomerControllerImpl implements CustomerController {
 
     @Override
     public void update(Context context) {
-        Customer customer = context.bodyAsClass(Customer.class);
+        Cliente customer = context.bodyAsClass(Cliente.class);
         String id = context.pathParam(ID);
 
         if (customer.getId() != null && !customer.getId().toString().equals(id)) {

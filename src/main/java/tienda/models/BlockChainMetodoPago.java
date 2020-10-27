@@ -4,19 +4,21 @@ import com.fasterxml.uuid.Generators;
 
 import java.util.UUID;
 
-public class BlockChainPaymentMethod extends PaymentMethod{
+public class BlockChainMetodoPago extends MetodoPago {
 
     private String walletId;
+    private Double comision;
 
     @Override
-    public  void payOrder(Order order){
+    public  void pagarPedido(Pedido order){
         walletPayOrder(order);
     }
 
-    public void walletPayOrder(Order order){
-        Double price = order.calculateTotalOrder();
+    public void walletPayOrder(Pedido order){
+        
+        comision = order.getMontoTotal() * 0.05;
         /* Doing Blok Chain Validation */
-        System.out.println("Processing payment with wallet "+walletId+" | total: "+price);
+        System.out.println("Procesando el pago con wallet "+walletId+" | total: "+order.getMontoTotal() + " comision: " +comision);
     }
 
     public String getWalletId() {

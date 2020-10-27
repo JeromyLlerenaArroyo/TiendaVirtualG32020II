@@ -1,15 +1,15 @@
 package tienda.models.impl;
 
-import tienda.models.Order;
-import tienda.models.Product;
-import tienda.models.interfaces.IOrderItem;
+import tienda.models.Pedido;
+import tienda.models.interfaces.IPedidoDetalle;
 
-public class OrderItemInternet implements IOrderItem {
+public class PedidoDetalleInternet implements IPedidoDetalle {
+
     private String idProduct;
     private Integer quantity;
     private Double price;
 
-    public OrderItemInternet(String idProduct,Integer quantity,Double price)  {
+    public PedidoDetalleInternet(String idProduct,Integer quantity,Double price)  {
         //this.order = order;
         //this.product = product;
         this.idProduct = idProduct;
@@ -18,19 +18,19 @@ public class OrderItemInternet implements IOrderItem {
     }
 
     @Override
-    public Double calculatePrice() {
+    public Double calculaPrecio() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Order getOrder() {
+    public Pedido getPedido() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Double getPrice() {
+    public Double getPrecio() {
         // Intenet Promocion
         Double customPrice = 0.0;
         customPrice = this.price * this.quantity * 0.85;
@@ -38,19 +38,13 @@ public class OrderItemInternet implements IOrderItem {
     }
 
     @Override
-    public Product getProduct() {
+    public Integer getCantidad() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Integer getQuantity() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setOrder(Order order) {
+    public void setPedido(Pedido order) {
         // TODO Auto-generated method stub
 
     }
