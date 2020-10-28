@@ -30,7 +30,7 @@ public class PedidoRepositorioImpl implements PedidoRepositorio {
 
     @Override
     public void create(Pedido pedido) {
-        System.out.println("entrando: " + pedido);
+
         pedido.setId((new ObjectId()).toString());
         pedidos.insertOne(pedido);
     }

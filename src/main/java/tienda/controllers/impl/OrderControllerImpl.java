@@ -33,17 +33,19 @@ public class OrderControllerImpl implements OrderController {
     public void create(Context context) {
         Pedido order = context.bodyAsClass(Pedido.class);
 
-        /*List<IPedidoDetalle> items = new ArrayList<>();
+        List<IPedidoDetalle> items = new ArrayList<>();
         PedidoDetalleInternet oi1 = new PedidoDetalleInternet( "P01010034", 1, 400.90);
         PedidoDetallePromocion oi2 = new PedidoDetallePromocion( "P01010025", 1, 600.90);
         items.add(oi1);
         items.add(oi2);
         order.setDetallePedido(items);
+        order.setMontoTotal( order.calcularMontoPedido() );
 
-        System.out.println("Precio Total " + order.calcularMontoPedido() );*/
+        System.out.println("Precio Total " + order.getMontoTotal()  );
 
         //MetodoPago paymentMethod = new MetodoPago();
-        //order.pagar(paymentMethod);
+        BlockChainMetodoPago paymentMethod = new BlockChainMetodoPago();
+        order.pagar(paymentMethod);
 
         orderRepository.create(order);
 
@@ -51,26 +53,6 @@ public class OrderControllerImpl implements OrderController {
                 .header(HttpHeader.LOCATION.name(), Paths.formatPostLocation(order.getId().toString()));
 
     }
-
-    /*public void pay(Context context){
-        String id = context.pathParam(ID);
-        Pedido order = context.bodyAsClass(Pedido.class);
-        order.setId(id);
-
-        List<IPedidoDetalle> items = new ArrayList<>();
-        PedidoDetalleInternet oi1 = new PedidoDetalleInternet( "P01010034", 1, 200.90);
-        PedidoDetallePromocion oi2 = new PedidoDetallePromocion( "P01010025", 1, 70.90);
-        items.add(oi1);
-        items.add(oi2);
-        order.setDetallePedido(items);
-
-        MetodoPago paymentMethod = new MetodoPago();
-        BlockChainMetodoPago blockChainPaymentMethod = new BlockChainMetodoPago();
-
-        order.pay(paymentMethod);
-        order.pay(blockChainPaymentMethod);
-
-    }*/
 
     public void find(Context context) {
         String id = context.pathParam(ID);
