@@ -1,5 +1,8 @@
 package tienda;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.javalin.Javalin;
 import io.javalin.plugin.openapi.OpenApiOptions;
 import io.javalin.plugin.openapi.OpenApiPlugin;
@@ -11,6 +14,7 @@ import tienda.controllers.impl.CustomerControllerImpl;
 import tienda.controllers.impl.OrderControllerImpl;
 import tienda.repositories.impl.ClienteRepositorioImpl;
 import tienda.repositories.impl.PedidoRepositorioImpl;
+import tienda.models.*;
 
 public class App {
 
@@ -61,6 +65,20 @@ public class App {
     }
 
     public static void main(String[] args) {
-        new App().startup();
+        //new App().startup();
+
+        Producto producto1 = new Televisor(new Samsung(), new Europeo());
+        Producto producto2 = new Lavadora(new Samsung(), new LatinoAmericano());
+        Producto producto3 = new Lavadora(new Panasonic(), new Europeo());
+
+        List<Producto> listaProductos = new ArrayList<Producto>();
+
+        listaProductos.add(producto1);
+        listaProductos.add(producto2);
+        listaProductos.add(producto3);
+
+        for(Producto prd : listaProductos) {
+            prd.impresion();
+        }
     }
 }
